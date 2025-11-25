@@ -3,6 +3,7 @@ import time
 
 def main(page: ft.Page):
     page.title = "Manual and Automatic Slider"
+    page.theme_mode = ft.ThemeMode.DARK
 
     slider1_value = 0
     slider2_value = 0
@@ -56,7 +57,7 @@ def main(page: ft.Page):
                 page.update()
             
     def exit_app(_):
-        page.window_destroy()
+         page.window.close()
 
 
     #Building Interface

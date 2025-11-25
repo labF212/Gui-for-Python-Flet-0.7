@@ -19,8 +19,8 @@ async def main(page: ft.Page):
     )
 
     # Add widgets to page
-    await page.add_async(txt)
-    await page.add_async(table)
+    page.add(txt)
+    page.add(table)
 
     # List to store last 10 temperature and humidity values
     values = []
@@ -52,7 +52,7 @@ async def main(page: ft.Page):
             table.rows = rows
 
             # Update the page with the new values
-            await page.update_async()
+            page.update()
 
             # Sleep for 1 second
             await asyncio.sleep(1)

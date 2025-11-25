@@ -62,7 +62,7 @@ def main(page: ft.Page):
                 page.update()
             
     def exit_app(_):
-        page.window_destroy()
+         page.window.close()
 
 
     #Building Interface
