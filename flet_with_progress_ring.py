@@ -6,18 +6,21 @@ async def main(page: ft.Page):
     page.title = "Medição de Temperatura e Humidade"
 
     # Title
-    txt = ft.Text("Medição de Temperatura e Humidade", text_align="CENTER", weight="BOLD")
+    txt = ft.Text(
+        "Medição de Temperatura e Humidade",
+        text_align=ft.TextAlign.CENTER,
+        weight=ft.FontWeight.BOLD
+    )
 
     # Progress Ring – Temperatura
     txt_temp = ft.Text("Temperatura")
-
     pr_temp_value = ft.Text("0°C", size=20)
 
     pr_temp_container = ft.Container(
         content=pr_temp_value,
         width=50,
         height=50,
-        alignment=ft.alignment.center,
+        alignment=ft.Alignment.CENTER,
         bgcolor="white",
         border_radius=50,
     )
@@ -32,14 +35,13 @@ async def main(page: ft.Page):
 
     # Progress Ring – Humidade
     txt_hum = ft.Text("Humidade")
-
     pr_hum_value = ft.Text("0%", size=20)
 
     pr_hum_container = ft.Container(
         content=pr_hum_value,
         width=50,
         height=50,
-        alignment=ft.alignment.center,
+        alignment=ft.Alignment.CENTER,
         bgcolor="white",
         border_radius=50,
     )
@@ -52,8 +54,7 @@ async def main(page: ft.Page):
         value=0.0,
     )
 
-    # Tables
-    
+    # Table
     table = ft.DataTable(
         columns=[
             ft.DataColumn(ft.Text("Temperatura")),
@@ -63,25 +64,22 @@ async def main(page: ft.Page):
     )
 
     # --- LAYOUT ORGANIZADO ---
-
-    # Linha com os dois progress rings
     rings_row = ft.Row(
         [
-            ft.Column([txt_temp, pr_temp, pr_temp_container], alignment="center"),
-            ft.Column([txt_hum, pr_hum, pr_hum_container], alignment="center"),
+            ft.Column([txt_temp, pr_temp, pr_temp_container], alignment=ft.MainAxisAlignment.CENTER),
+            ft.Column([txt_hum, pr_hum, pr_hum_container], alignment=ft.MainAxisAlignment.CENTER),
         ],
-        alignment="center",
+        alignment=ft.MainAxisAlignment.CENTER,
     )
 
     # Adicionar tudo à página
     page.add(
-        ft.Row([txt], alignment="center"),
+        ft.Row([txt], alignment=ft.MainAxisAlignment.CENTER),
         rings_row,
-        ft.Row([table], alignment="center")
+        ft.Row([table], alignment=ft.MainAxisAlignment.CENTER)
     )
 
     # ----------------------------------------
-
     values = []
 
     async def update_values():

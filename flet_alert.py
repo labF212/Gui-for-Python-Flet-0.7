@@ -1,106 +1,123 @@
 import flet as ft
 
 def main(page: ft.Page):
-    page.title = "Como utilizar botões Elevated buttons"
+    page.title = "Como utilizar botões"
     page.theme_mode = ft.ThemeMode.DARK
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    # Elementos visuais
-    title_page = ft.Text("Botões e Input Box")
-    i = ft.TextField(width=300)
-    t = ft.Text()
+    # -------- ELEMENTOS VISUAIS --------
+    title_page = ft.Text(
+        "Botões e Input Box",
+        size=20,
+        weight=ft.FontWeight.BOLD
+    )
 
-    # Diálogo de alerta (campo vazio)
-    dialog1 = ft.AlertDialog(
+    input_text = ft.TextField(
+        width=300,
+        label="Introduza texto"
+    )
+
+    output_text = ft.Text()
+
+    # -------- DIÁLOGOS --------
+    def close_alert(e):
+        alert_dialog.open = False
+        page.update()
+
+    def close_help(e):
+        help_dialog.open = False
+        page.update()
+
+    alert_dialog = ft.AlertDialog(
         title=ft.Text("Caixa de texto vazia"),
-        content=ft.Text("Introduza dados na caixa primeiro"),
-        actions=[ft.TextButton("OK", on_click=lambda e: close_dlg1())],
+        content=ft.Text("Introduza dados na caixa primeiro."),
+        actions=[
+            ft.Button("OK", on_click=close_alert)
+        ],
         actions_alignment=ft.MainAxisAlignment.CENTER,
     )
 
-    # Diálogo de ajuda
-    dialog_ajuda = ft.AlertDialog(
-        title=ft.Text(value="Como usar", text_align="CENTER", weight="BOLD"),
-        content=ft.Row([
-            ft.Icon(name=ft.Icons.QUESTION_MARK_OUTLINED, color=ft.Colors.PINK, size=60),
-            ft.Column([
-                ft.Text("Coloque algo na caixa de texto."),
-                ft.Text("Grave o que escreveu no botão gravar."),
-                ft.Text("Apague o que escreveu com o botão Apagar.")
-            ], tight=True),
-        ]),
-        actions=[ft.TextButton("OK", expand=True, on_click=lambda e: close_dlg_ajuda())],
+    help_dialog = ft.AlertDialog(
+        title=ft.Text("Como usar", weight=ft.FontWeight.BOLD),
+        content=ft.Row(
+            [
+                ft.Icon(
+                    ft.Icons.QUESTION_MARK_OUTLINED,
+                    size=60,
+                    color=ft.Colors.PINK
+                ),
+                ft.Column(
+                    [
+                        ft.Text("• Escreva algo na caixa de texto."),
+                        ft.Text("• Clique em Guardar para mostrar."),
+                        ft.Text("• Clique em Apagar para limpar."),
+                    ],
+                    tight=True
+                ),
+            ],
+            spacing=20
+        ),
+        actions=[
+            ft.Button("OK", on_click=close_help)
+        ],
         actions_alignment=ft.MainAxisAlignment.CENTER,
-        on_dismiss=lambda e: print("Dialog dismissed!"),
     )
 
-    # Funções
-    def open_alert():
-        page.dialog = dialog1
-        dialog1.open = True
-        page.update()
+    # depois de criar alert_dialog e help_dialog
+    page.overlay.extend([alert_dialog, help_dialog])
 
-    def close_dlg1():
-        dialog1.open = False
-        page.update()
 
+    # -------- FUNÇÕES --------
     def save_clicked(e):
-        if not i.value.strip():
-            open_alert()
+        if not input_text.value.strip():
+            alert_dialog.open = True
+            page.update()
             return
-        t.value = i.value
+
+        output_text.value = input_text.value
         page.update()
 
     def clear_clicked(e):
-        i.value = ""
-        t.value = ""
+        input_text.value = ""
+        output_text.value = ""
         page.update()
 
     def help_clicked(e):
-        page.dialog = dialog_ajuda
-        dialog_ajuda.open = True
+        help_dialog.open = True
         page.update()
 
-    def close_dlg_ajuda():
-        dialog_ajuda.open = False
-        page.update()
-
-    # Botões
-    save_button = ft.ElevatedButton(
+    # -------- BOTÕES (API MODERNA) --------
+    save_button = ft.Button(
         "Guardar",
-        tooltip="Guarda o que está na caixa de texto",
         icon=ft.Icons.SAVE,
-        icon_color="green600",
+        tooltip="Guarda o texto",
         on_click=save_clicked
     )
 
-    clear_button = ft.ElevatedButton(
+    clear_button = ft.Button(
         "Apagar",
-        tooltip="Apaga conteúdo da caixa de texto",
-        icon=ft.Icons.DELETE_FOREVER_ROUNDED,
-        icon_color="pink600",
+        icon=ft.Icons.DELETE_FOREVER,
+        tooltip="Apaga o texto",
         on_click=clear_clicked
     )
 
-    help_button = ft.ElevatedButton(
+    help_button = ft.Button(
         "Ajuda",
-        tooltip="Mostra ajuda do programa",
-        icon=ft.Icons.HELP,
-        icon_color="blue600",
+        icon=ft.Icons.HELP_OUTLINE,
+        tooltip="Mostra ajuda",
         on_click=help_clicked
     )
 
-    # Layout
-    button_row = ft.Row(
-        [save_button, clear_button, help_button],
-        alignment=ft.MainAxisAlignment.CENTER,
-        spacing=10
-    )
-
+    # -------- LAYOUT --------
     page.add(
-        ft.Row([title_page], alignment=ft.MainAxisAlignment.CENTER),
-        i,
-        button_row,
-        t
+        title_page,
+        input_text,
+        ft.Row(
+            [save_button, clear_button, help_button],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=12
+        ),
+        output_text
     )
 
-ft.app(target=main)
+ft.run(main)

@@ -17,13 +17,13 @@ async def main(page: ft.Page):
     # PROGRESS BAR (0 → 100)
     progress = ft.ProgressBar(width=300, value=0)
 
-    start_button = ft.ElevatedButton(
+    start_button = ft.Button(
         "Save",
         icon=ft.Icons.SAVE,
         icon_color="green600"
     )
 
-    stop_button = ft.ElevatedButton(
+    stop_button = ft.Button(
         "Stop",
         disabled=True,
         icon=ft.Icons.STOP,
@@ -118,4 +118,4 @@ async def main(page: ft.Page):
     stop_button.on_click = stop_clicked
 
 
-ft.app(main)
+ft.run(main)

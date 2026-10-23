@@ -58,4 +58,4 @@ async def main(page: ft.Page):
     asyncio.create_task(update_values())
 
 # Iniciar o app
-ft.app(target=main)
+ft.run(main)
